@@ -17,10 +17,10 @@ class UserListGenericView(ListAPIView):
         return User.objects.all()
 
     def list(self, request: Request, *args, **kwargs) -> Response:
-        projects = self.get_queryset()
-        if not projects.exists():
+        queryset = self.get_queryset()
+        if not queryset.exists():
             return Response(data=[], status=status.HTTP_204_NO_CONTENT)
-        serializer = self.get_serializer(projects, many=True)
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class UserDetailGenericView(RetrieveAPIView):

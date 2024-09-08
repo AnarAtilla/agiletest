@@ -1,3 +1,5 @@
+# apps/users/models.py
+
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin, UserManager
 from django.core.validators import MinLengthValidator
@@ -6,7 +8,6 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.projects.models import Project
 from apps.users.choices.positions import Positions
-
 
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(
@@ -36,16 +37,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(
-        name="registered", auto_now_add=True
+        _("registered"), auto_now_add=True
     )
     last_login = models.DateTimeField(null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
     deleted = models.BooleanField(default=False)
     position = models.CharField(
-        max_length=15,
-        choices=Positions.choices,
-        default=Positions.PROGRAMMER
+        max_length=30,  # Увеличим длину для более длинных позиций
+        choices=Positions.choices(),
+        default=Positions.PROGRAMMER.name  # Используем name, чтобы сохранить как строку
     )
     project = models.ForeignKey(
         Project,

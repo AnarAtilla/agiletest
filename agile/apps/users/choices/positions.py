@@ -1,9 +1,11 @@
-from enum import Enum
+# apps/users/choices/positions.py
 
+from enum import Enum
 
 class Positions(Enum):
     CEO = "CEO"
     CTO = "CTO"
+    DEVELOPER = "Developer"
     DESIGNER = "Designer"
     PRODUCT_OWNER = "Product Owner"
     PROJECT_OWNER = "Project Owner"

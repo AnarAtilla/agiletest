@@ -1,9 +1,11 @@
+# apps/users/urls.py
+
 from django.urls import path
 from apps.users.views.user_views import (
     UserListGenericView,
     RegisterUserGenericView,
-    UserDetailGenericView)
-
+    UserDetailGenericView
+)
 
 urlpatterns = [
     path('', UserListGenericView.as_view(), name='user-list'),

@@ -4,10 +4,10 @@ from pytest_bdd import scenarios, given, when, then, parsers
 from rest_framework.test import APIClient
 from apps.users.models import User, Project
 
-# Получение абсолютного пути к файлу функций
+# Получение абсолютного пути к файлу feature
 feature_file_path = os.path.join(os.path.dirname(__file__), 'features', 'user_api.feature')
 
-# Загрузка сценариев из файла функций
+# Загрузка сценариев из файла feature
 scenarios(feature_file_path)
 
 # Фикстуры
@@ -51,8 +51,7 @@ def step_then_should_receive_status_code(status_code):
         f"Expected status code {status_code}, but got {pytest.response.status_code}"
     )
 
-# Добавление шага для проверки наличия поля в ответе
-@then('the response should contain the field "{field}"')
+@then(parsers.parse('the response should contain the field "{field}"'))
 def step_then_response_contains_field(field):
     response_data = pytest.response.json()
     assert field in response_data, f"Field '{field}' not found in response"
@@ -63,11 +62,6 @@ def step_then_response_contains_error_message():
     assert response_data.get('detail') == "No User matches the given query.", (
         f"Expected error message 'No User matches the given query.', but got '{response_data.get('detail')}'"
     )
-
-@then(parsers.parse('the response should contain the field "{field}"'))
-def step_then_response_contains_field(field):
-    response_data = pytest.response.json()
-    assert field in response_data, f"Field '{field}' not found in response"
 
 @then(parsers.parse('the response should contain the following user details:'))
 def step_then_response_contains_user_details(pytestbdd_table):

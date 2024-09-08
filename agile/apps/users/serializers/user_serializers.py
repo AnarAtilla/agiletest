@@ -1,8 +1,11 @@
+# apps/users/serializers.py
+
 import re
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from apps.users.models import User
+from apps.users.choices.positions import Positions
 
 class UserListSerializer(serializers.ModelSerializer):
     project = serializers.StringRelatedField()
@@ -68,8 +71,8 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         if not re.match('^[a-zA-Z]*$', last_name):
             raise serializers.ValidationError({"last_name": "The last name must contain only alphabet symbols"})
 
-        if not position:
-            raise serializers.ValidationError({"position": "This field is required."})
+        if position not in [pos.name for pos in Positions]:  # Validate position against Enum
+            raise serializers.ValidationError({"position": "Invalid position."})
 
         password = data.get("password")
         re_password = data.get("re_password")

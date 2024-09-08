@@ -2,10 +2,13 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-
+from dotenv import load_dotenv
 
 def main():
     """Run administrative tasks."""
+    # Загружаем переменные окружения из .env файла
+    load_dotenv()
+
     # Добавляем корневой каталог проекта в PYTHONPATH
     project_root = os.path.dirname(os.path.abspath(__file__))
     if project_root not in sys.path:
@@ -23,7 +26,6 @@ def main():
         ) from exc
 
     execute_from_command_line(sys.argv)
-
 
 if __name__ == '__main__':
     main()
