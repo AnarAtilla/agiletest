@@ -23,6 +23,6 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run tests
-      working-directory: ./agile  # Указываем рабочую директорию
+      working-directory: D:\dj_agile\dj_agile\agile  # Set the working directory
       run: |
         python manage.py test
