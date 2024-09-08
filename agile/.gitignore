@@ -1,17 +1,15 @@
-# Игнорировать файл .env с конфиденциальными данными
+# Ignore .env file
 .env
 
-# Игнорировать файлы и директории, сгенерированные операционной системой
-*.log
-*.pot
-*.pyc
-__pycache__/
+# Ignore virtual environment
+myenv/
 
-# Игнорировать файлы и директории, сгенерированные IDE/редакторами
+# Ignore database files
+*.sqlite3
+
+# Ignore IDE settings
 .idea/
+.vscode/
 
-# Игнорировать директории и файлы виртуальных окружений
-venv/
-.venv/
-
-documents/
+# Ignore logs
+*.log
