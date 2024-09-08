@@ -1,15 +1,23 @@
-# Ignore .env file
+# Игнорировать виртуальное окружение
+.venv/
+myvenv/
+
+# Игнорировать файлы настроек
 .env
 
-# Ignore virtual environment
-myenv/
-
-# Ignore database files
+# Игнорировать файлы баз данных
 *.sqlite3
 
-# Ignore IDE settings
+# Игнорировать файлы логов
+*.log
+
+# Игнорировать файлы скрытые системой
+.DS_Store
+
+# Игнорировать файлы с результатами сборки
+__pycache__/
+*.pyc
+
+# Игнорировать файлы IDE
 .idea/
 .vscode/
-
-# Ignore logs
-*.log
