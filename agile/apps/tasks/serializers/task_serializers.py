@@ -1,39 +1,15 @@
 from datetime import datetime
-from typing import Any
+from typing import Any, List
 
 from django.utils import timezone
 from rest_framework import serializers
 
 from apps.projects.models import Project
-from apps.projects.serializers.project_serializers import \
-    ProjectShortInfoSerializer
+from apps.projects.serializers.project_serializers import ProjectShortInfoSerializer
 from apps.tasks.choices.priorities import Priority
 from apps.tasks.models import Tag, Task
 from apps.tasks.serializers.tag_serializers import TagSerializer
 from apps.users.models import User
-
-
-class AllTasksSerializer(serializers.ModelSerializer):
-    project = serializers.SlugRelatedField(
-        read_only=True,
-        slug_field='name'
-    )
-    assignee = serializers.SlugRelatedField(
-        read_only=True,
-        slug_field='email'
-    )
-
-    class Meta:
-        model = Task
-        fields = (
-            'id',
-            'name',
-            'status',
-            'priority',
-            'project',
-            'assignee',
-            'deadline'
-        )
 
 
 class CreateUpdateTaskSerializer(serializers.ModelSerializer):
@@ -45,6 +21,10 @@ class CreateUpdateTaskSerializer(serializers.ModelSerializer):
         slug_field='email',
         queryset=User.objects.all(),
         required=False,
+    )
+    tags = serializers.PrimaryKeyRelatedField(
+        queryset=Tag.objects.all(),
+        many=True
     )
 
     class Meta:
@@ -80,22 +60,22 @@ class CreateUpdateTaskSerializer(serializers.ModelSerializer):
             )
         return value
 
-    def validate_project(self, value: str) -> str:
-        if not Project.objects.filter(name=value).exists():
+    def validate_project(self, value: Project) -> Project:
+        if not Project.objects.filter(name=value.name).exists():
             raise serializers.ValidationError(
                 "The project with this name couldn't be found in the database"
             )
         return value
 
-    def validate_tags(self, value: list[str, ...]) -> list[str, ...]:
-        if not Tag.objects.filter(name__in=value).exists():
+    def validate_tags(self, value: List[Tag]) -> List[Tag]:
+        tag_ids = [tag.id for tag in value]
+        if not Tag.objects.filter(id__in=tag_ids).count() == len(tag_ids):
             raise serializers.ValidationError(
-                "The tags couldn't be found in the database"
+                "One or more tags couldn't be found in the database"
             )
         return value
 
-    def validate_deadline(self, value: str) -> int:
-        value = timezone.make_aware(value.replace(tzinfo=None), timezone.get_current_timezone())
+    def validate_deadline(self, value: datetime) -> datetime:
         if value < timezone.now():
             raise serializers.ValidationError(
                 "The deadline of the task couldn't be in the past"
@@ -105,8 +85,7 @@ class CreateUpdateTaskSerializer(serializers.ModelSerializer):
     def create(self, validated_data: dict[str, Any]) -> Task:
         tags = validated_data.pop('tags', [])
         task = Task.objects.create(**validated_data)
-        for tag in tags:
-            task.tags.add(tag)
+        task.tags.set(tags)
         task.save()
         return task
 
@@ -117,19 +96,20 @@ class CreateUpdateTaskSerializer(serializers.ModelSerializer):
             setattr(instance, attr, value)
 
         if tags:
-            for tag in tags:
-                instance.tags.add(tag)
+            instance.tags.set(tags)
 
         instance.save()
 
         return instance
 
-
 class TaskDetailSerializer(serializers.ModelSerializer):
+    status = serializers.SerializerMethodField()
     project = ProjectShortInfoSerializer()
-    tags = TagSerializer(many=True, read_only=True)
+    tags = TagSerializer(many=True)
+
+    def get_status(self, obj):
+        return obj.get_status_display()
 
     class Meta:
         model = Task
         exclude = ('updated_at', 'deleted_at')
-

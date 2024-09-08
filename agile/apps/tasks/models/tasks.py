@@ -1,24 +1,20 @@
 from django.db import models
-
 from apps.projects.models.project import Project
 from apps.tasks.choices.priorities import Priority
 from apps.tasks.choices.statuses import Statuses
 from apps.tasks.utils.set_end_of_month import calculate_end_of_month
 from apps.users.models import User
 
-
 class Task(models.Model):
-    name = models.CharField(
-        max_length=120
-    )
+    name = models.CharField(max_length=120)
     description = models.TextField()
     status = models.CharField(
         max_length=15,
-        choices=Statuses.choices,
-        default=Statuses.NEW
+        choices=Statuses.choices(),
+        default=Statuses.NEW.value
     )
     priority = models.SmallIntegerField(
-        choices=Priority,
+        choices=Priority.choices(),
         default=Priority.MEDIUM[0]
     )
     project = models.ForeignKey(
