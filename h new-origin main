@@ -1,0 +1,29 @@
+[33mcommit aedcd789643c42cec15c9520f3dc60fc5bdba8b3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: AnarAtilla <anar.m.allahverdi@gmail.com>
+Date:   Sun Sep 8 17:14:58 2024 +0200
+
+    update tests
+
+[33mcommit 1fc2eeee4ebb080d788864459e122224a0a42901[m
+Author: AnarAtilla <anar.m.allahverdi@gmail.com>
+Date:   Sun Sep 8 13:14:16 2024 +0200
+
+    update  requirements
+
+[33mcommit fc26a938ef66d93c7b4a5fd2fba4e8a1c515b7b9[m
+Author: AnarAtilla <anar.m.allahverdi@gmail.com>
+Date:   Sun Sep 8 13:11:11 2024 +0200
+
+    Add .gitignore file
+
+[33mcommit 03802de7426247d81b71c1480cfb1f42ea29f1e8[m
+Author: AnarAtilla <anar.m.allahverdi@gmail.com>
+Date:   Sun Sep 8 12:35:20 2024 +0200
+
+    Web development: домашние задание 16 (Python)
+
+[33mcommit 40ec60bd9cf45f047770b2a88a39cdce6d77b204[m[33m ([m[1;32mnew-branch-name[m[33m, [m[1;32mmaster[m[33m)[m
+Author: AnarAtilla <anar.m.allahverdi@gmail.com>
+Date:   Sat Sep 7 04:15:53 2024 +0200
+
+    Fix BDD step definitions and update user API tests
