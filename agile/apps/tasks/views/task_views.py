@@ -29,14 +29,13 @@ class TasksListAPIView(APIView):
         project_name = self.request.query_params.get('project_name')
         assignee_email = self.request.query_params.get('assignee_email')
 
+        filters = {}
         if project_name:
-            return Task.objects.filter(project__name=project_name)
+            filters['project__name'] = project_name
+        if assignee_email:
+            filters['assignee__email'] = assignee_email
 
-        elif assignee_email:
-            return Task.objects.filter(assignee__email=assignee_email)
-
-        else:
-            return Task.objects.all()
+        return Task.objects.filter(**filters)
 
     def get(self, request: Request, *args, **kwargs) -> Response:
         tasks = self.get_objects()
@@ -76,7 +75,6 @@ class TasksListAPIView(APIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
-
 
 class TaskDetailAPIView(APIView):
     def get_object(self):
@@ -125,4 +123,3 @@ class TaskDetailAPIView(APIView):
             },
             status=status.HTTP_204_NO_CONTENT
         )
-

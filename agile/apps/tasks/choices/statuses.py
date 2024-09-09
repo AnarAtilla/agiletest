@@ -11,4 +11,4 @@ class Statuses(Enum):
 
     @classmethod
     def choices(cls):
-        return [(attr.name, attr.value) for attr in cls]
+        return [(attr.value, attr.name.capitalize()) for attr in cls]
